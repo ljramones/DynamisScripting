@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.dynamisscripting</groupId>
+    <artifactId>dynamis-scripting-parent</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>DynamisScripting</name>
+    <description>Dynamis scripting engine multi-module scaffold</description>
+    <url>https://github.com/dynamis-engine/DynamisScripting</url>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+    </properties>
+
+    <modules>
+        <module>scripting-api</module>
+        <module>scripting-spi</module>
+        <module>scripting-dsl</module>
+        <module>scripting-canon</module>
+        <module>scripting-oracle</module>
+        <module>scripting-chronicler</module>
+        <module>scripting-percept</module>
+        <module>scripting-society</module>
+        <module>scripting-economy</module>
+        <module>scripting-runtime</module>
+        <module>scripting-ashford</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <release>${maven.compiler.release}</release>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
