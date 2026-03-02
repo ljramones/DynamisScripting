@@ -102,6 +102,13 @@ Any future AST-based validator must preserve current rejection categories and re
 - Current behavior: drifts exceeding this bound are rejected to prevent runaway canonical changes.
 - Future improvement: move this constant to runtime configuration for world-specific tuning.
 
+## Economy Cost Table Deferral
+
+`ContractCostTable` hot-reload/parsing is intentionally partial in the current phase.
+
+- Current behavior: `computeCost(...)` uses deterministic tier defaults and `applyPatch(...)` logs the applied patch version.
+- Deferred: full data-driven/YAML-backed cost-table loading and atomic reload validation.
+
 ## Conventions
 
 - Group ID: `org.dynamisscripting`
