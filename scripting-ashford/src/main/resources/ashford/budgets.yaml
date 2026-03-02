@@ -1,0 +1,10 @@
+# Ashford Budget Tables
+# Loaded by Oracle RuleLoader when YAML support is implemented
+
+budgets:
+  - budgetId: accusations_per_day
+    capacity: 3
+  - budgetId: contracts_per_faction_per_day
+    capacity: 5
+  - budgetId: bounties_active
+    capacity: 10

@@ -1,0 +1,14 @@
+# Ashford Starting Economic State
+
+faction_funds:
+  - factionId: merchant_guild
+    balance: 50000.0
+  - factionId: city_watch
+    balance: 20000.0
+  - factionId: thieves_guild
+    balance: 15000.0
+
+contract_cost_tiers:
+  HIGH: 5000.0
+  MEDIUM: 2000.0
+  LOW: 500.0

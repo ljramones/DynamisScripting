@@ -66,7 +66,7 @@ public final class CommitPhase {
             throw new OracleException("COMMIT", "causalLink must not be null or empty");
         }
 
-        CanonTime canonTime = timekeeper.advance(1L);
+        CanonTime canonTime = timekeeper.current();
         long commitId = commitIdCounter.getAndIncrement();
         CanonEvent event = CanonEvent.of(commitId, canonTime, causalLink, worldEvent);
         canonLog.append(event);

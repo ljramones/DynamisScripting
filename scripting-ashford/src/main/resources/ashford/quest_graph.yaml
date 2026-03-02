@@ -1,0 +1,33 @@
+# Ashford Quest Graph
+# Loaded by GraphLoader when YAML support is implemented
+
+main_spine:
+  - nodeId: ashford.opening
+    archetypeId: authored
+    triggerPredicate: "canonTime > 0"
+    preconditions: []
+    priority: 100
+    repeatable: false
+
+  - nodeId: ashford.tension_rising
+    archetypeId: authored
+    triggerPredicate: "canonTime > 10"
+    preconditions: [ashford.opening]
+    priority: 90
+    repeatable: false
+
+side_quests:
+  - nodeId: ashford.merchant_contract
+    archetypeId: economics.contract_escalation
+    triggerPredicate: "canonTime > 2"
+    preconditions: []
+    priority: 50
+    repeatable: true
+    cooldownTicks: 20
+
+  - nodeId: ashford.stolen_shipment
+    archetypeId: authored
+    triggerPredicate: "canonTime > 5"
+    preconditions: [ashford.merchant_contract]
+    priority: 40
+    repeatable: false

@@ -13,11 +13,36 @@
     <artifactId>dynamis-scripting-ashford</artifactId>
     <name>dynamis-scripting-ashford</name>
 
+    <properties>
+        <junit.jupiter.version>5.11.4</junit.jupiter.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.dynamisscripting</groupId>
             <artifactId>dynamis-scripting-runtime</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dynamisscripting</groupId>
+            <artifactId>dynamis-scripting-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dynamisscripting</groupId>
+            <artifactId>dynamis-scripting-chronicler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dynamisscripting</groupId>
+            <artifactId>dynamis-scripting-economy</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

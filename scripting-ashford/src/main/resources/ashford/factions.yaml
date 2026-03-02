@@ -1,0 +1,34 @@
+# Ashford Faction Profiles
+# Loaded by SocietyProfileLoader when YAML support is implemented
+# Format: societyId, societyName, dimensions (weightings), goap_weights
+
+factions:
+  - societyId: merchant_guild
+    societyName: "Ashford Merchant Guild"
+    dimensions:
+      economics: { weight: 0.9 }
+      honor_shame: { weight: 0.3 }
+    goap_weights:
+      survival: 0.5
+      wealth: 0.95
+      honor: 0.2
+
+  - societyId: city_watch
+    societyName: "Ashford City Watch"
+    dimensions:
+      authority: { weight: 0.85 }
+      honor_shame: { weight: 0.6 }
+    goap_weights:
+      survival: 0.7
+      order: 0.9
+      wealth: 0.2
+
+  - societyId: thieves_guild
+    societyName: "Ashford Thieves Guild"
+    dimensions:
+      economics: { weight: 0.6 }
+      fear_power: { weight: 0.7 }
+    goap_weights:
+      survival: 0.8
+      wealth: 0.7
+      honor: 0.1

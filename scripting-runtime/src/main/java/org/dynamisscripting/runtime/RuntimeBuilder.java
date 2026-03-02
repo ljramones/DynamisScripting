@@ -11,7 +11,9 @@ import org.dynamisscripting.canon.DefaultCanonLog;
 import org.dynamisscripting.chronicler.ArchetypeInstantiator;
 import org.dynamisscripting.chronicler.ChroniclerScheduler;
 import org.dynamisscripting.chronicler.DefaultChronicler;
+import org.dynamisscripting.chronicler.GraphLoader;
 import org.dynamisscripting.chronicler.QuestGraph;
+import org.dynamisscripting.chronicler.StoryNode;
 import org.dynamisscripting.chronicler.TriggerEvaluator;
 import org.dynamisscripting.chronicler.WorldEventEmitter;
 import org.dynamisscripting.dsl.DslCompiler;
@@ -39,6 +41,7 @@ public final class RuntimeBuilder {
     private final List<CanonDimensionProvider> dimensions;
     private final List<ArbitrationRule> arbitrationRules;
     private final List<ChroniclerNodeArchetype> archetypes;
+    private final List<StoryNode> storyNodes;
     private final List<SocietyProfile> societyProfiles;
     private final List<PerceptFilter> perceptFilters;
     private final List<IntentInterceptor> interceptors;
@@ -48,6 +51,7 @@ public final class RuntimeBuilder {
         this.dimensions = new ArrayList<>();
         this.arbitrationRules = new ArrayList<>();
         this.archetypes = new ArrayList<>();
+        this.storyNodes = new ArrayList<>();
         this.societyProfiles = new ArrayList<>();
         this.perceptFilters = new ArrayList<>();
         this.interceptors = new ArrayList<>();
@@ -74,6 +78,11 @@ public final class RuntimeBuilder {
 
     public RuntimeBuilder withArchetype(ChroniclerNodeArchetype archetype) {
         this.archetypes.add(requireNonNull(archetype, "archetype"));
+        return this;
+    }
+
+    public RuntimeBuilder withStoryNode(StoryNode storyNode) {
+        this.storyNodes.add(requireNonNull(storyNode, "storyNode"));
         return this;
     }
 
@@ -133,7 +142,9 @@ public final class RuntimeBuilder {
         new RewriteDsl(dslCompiler);
 
         TriggerEvaluator triggerEvaluator = new TriggerEvaluator(predicateDsl, canonLog);
-        QuestGraph questGraph = new QuestGraph();
+        QuestGraph questGraph = storyNodes.isEmpty()
+                ? new QuestGraph()
+                : GraphLoader.buildManually(List.copyOf(storyNodes));
         ArchetypeInstantiator archetypeInstantiator = new ArchetypeInstantiator(List.copyOf(archetypes));
         ChroniclerScheduler scheduler = new ChroniclerScheduler(
                 questGraph,

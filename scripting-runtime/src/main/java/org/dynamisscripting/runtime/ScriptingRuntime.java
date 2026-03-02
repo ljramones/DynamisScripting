@@ -82,6 +82,21 @@ public final class ScriptingRuntime {
         }
     }
 
+    public void seedEvent(CanonEvent event) {
+        // Demo/test seeding only. Not for production use. Bypasses Oracle arbitration.
+        if (event == null) {
+            throw new RuntimeException("seedEvent", "event must not be null");
+        }
+        patchLock.lock();
+        try {
+            canonLog.append(event);
+            commitIdCounter.set(Math.max(commitIdCounter.get(), event.commitId() + 1L));
+            eventBus.publish(new CanonLogEvent(event));
+        } finally {
+            patchLock.unlock();
+        }
+    }
+
     @SuppressFBWarnings(
             value = {"EI_EXPOSE_REP"},
             justification = "Runtime intentionally exposes CanonLog only via the immutable interface contract")
