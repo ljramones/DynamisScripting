@@ -127,8 +127,7 @@ public final class RuntimeBuilder {
                 canonLog,
                 timekeeper,
                 commitIdCounter,
-                eventBus,
-                CanonLogEvent::new);
+                event -> eventBus.publish(new CanonLogEvent(event)));
 
         DefaultWorldOracle oracle = new DefaultWorldOracle(
                 validatePhase,

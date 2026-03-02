@@ -115,3 +115,163 @@ Any future AST-based validator must preserve current rejection categories and re
 - Package root: `org.dynamisscripting.*`
 - Use Conventional Commits (`feat:`, `fix:`, `docs:`, etc.)
 - Keep canonical boundaries strict: no cognition state mutations outside DynamisAI
+
+## Module Inventory
+
+- `scripting-api`: Base contracts and value records used by all other modules.
+- `scripting-spi`: Extension interfaces and result records for third-party customization.
+- `scripting-dsl`: Deterministic predicate/rewrite DSL compiler, validator, and evaluator.
+- `scripting-canon`: CanonLog storage/query/fork/replay and CanonTime ownership.
+- `scripting-oracle`: Validate -> Shape -> Commit arbitration pipeline.
+- `scripting-chronicler`: Narrative graph scheduler and WorldEvent proposal engine.
+- `scripting-percept`: PerceptBus delivery/filtering/degradation/provenance layer.
+- `scripting-society`: Society vectors, interaction modeling, and drift tracking.
+- `scripting-economy`: Economics dimension, budgets, contracts, and vertical slice objects.
+- `scripting-runtime`: Runtime assembly, tick orchestration, degradation monitoring, EventBus wiring.
+- `scripting-ashford`: Demo world wiring and authored data-only content pack.
+
+## Class Inventory
+
+### scripting-api
+- `CanonLog`: Canonical append/query/fork/replay API.
+- `Chronicler`: Tick-driven WorldEvent proposer contract.
+- `IntentBus`: Intent emission/subscription contract.
+- `PerceptBus`: Agent percept subscription/delivery contract.
+- `WorldOracle`: Validate/shape/commit arbitration contract.
+- `CanonEvent`: Canonical commit value record.
+- `CanonTime`: Simulation-only time record.
+- `Intent`: Agent intent proposal value record.
+- `Percept`: Agent percept value record derived from canon.
+- `WorldEvent`: Chronicler world-event proposal value record.
+- `WorldPatch`: Hot-reload patch descriptor record.
+
+### scripting-spi
+- `ArbitrationRule`: Oracle validation/shaping extension point.
+- `CanonDimensionProvider`: Canonical dimension lifecycle extension point.
+- `ChroniclerNodeArchetype`: Chronicler archetype instantiation extension point.
+- `IntentInterceptor`: Oracle pre/post pipeline interception hook.
+- `PerceptFilter`: Custom percept delivery/degradation hook.
+- `SocietyVectorDimension`: Society-axis definition and interaction contribution contract.
+- `WorldPatchValidator`: WorldPatch validation extension point.
+- `PatchValidationResult`: WorldPatch validation result record.
+- `ShapeOutcome`: SPI shape-evaluation result record.
+- `ValidationOutcome`: SPI validation-evaluation result record.
+
+### scripting-dsl
+- `CanonEvaluationContext`: Canon variable resolver used by DSL evaluation.
+- `ClauseTrace`: Single-clause explain-trace record.
+- `DslCompiler`: Cached expression compiler for predicate/rewrite DSL.
+- `DslEvaluationException`: Runtime expression-evaluation failure exception.
+- `DslExplainTrace`: Structured predicate explain-trace record.
+- `DslExpression`: Sealed base type for compiled DSL expressions.
+- `DslValidationException`: Static DSL validation failure exception.
+- `DslValidator`: Static sandbox validator and variable extractor.
+- `PredicateDsl`: Predicate evaluation API with optional traces.
+- `PredicateExpression`: Compiled predicate expression record.
+- `RewriteDsl`: Rewrite evaluation API producing optional shaped intents.
+- `RewriteExpression`: Compiled rewrite expression record.
+
+### scripting-canon
+- `CanonLogEntry`: CanonEvent plus internal sequence/telemetry metadata.
+- `CanonLogException`: CanonLog operation failure exception.
+- `CanonLogFork`: Fork helper façade over CanonLog branching.
+- `CanonLogQuery`: Static helper queries over CanonLog.
+- `CanonLogReplay`: Replay helper façade over CanonLog re-emission.
+- `CanonTimekeeper`: CanonTime owner/advancer with no wall-time simulation coupling.
+- `DefaultCanonLog`: Thread-safe append-only CanonLog implementation.
+
+### scripting-oracle
+- `BudgetLedger`: Thread-safe world-budget registry and consumption tracker.
+- `CommitPhase`: Canon commit phase and canonical event emission hook point.
+- `DefaultWorldOracle`: Full validate-shape-commit orchestration implementation.
+- `OracleException`: Oracle pipeline exception type.
+- `OracleExplainReport`: Structured explain report for arbitration outcomes.
+- `RuleLoader`: Rule-bundle loader stub/hook point.
+- `RuleRegistry`: Ordered, thread-safe arbitration-rule registry.
+- `ShapePhase`: Oracle shape-phase executor.
+- `ValidatePhase`: Oracle validation-phase executor.
+
+### scripting-chronicler
+- `ArchetypeInstantiator`: Registered archetype evaluator/instantiator.
+- `ChroniclerException`: Chronicler operation exception type.
+- `ChroniclerScheduler`: Tick evaluation and activation throttling scheduler.
+- `DefaultChronicler`: Chronicler implementation that emits WorldEvents only.
+- `GraphLoader`: Quest graph loader (YAML deferred) and manual builder helper.
+- `NodeState`: Story-node lifecycle enum.
+- `QuestGraph`: In-memory story graph with node state tracking.
+- `StoryNode`: Story-node definition record.
+- `TriggerEvaluator`: DSL-backed trigger evaluator and trace producer.
+- `WorldEventEmitter`: Listener-based WorldEvent emission bridge to Oracle.
+
+### scripting-percept
+- `DefaultPerceptBus`: Per-agent percept delivery/filter/degradation bus implementation.
+- `FidelityLevel`: Percept fidelity tier enum.
+- `FidelityModel`: Deterministic fidelity computation model.
+- `PerceptContributionRegistry`: Cross-module percept contribution registry.
+- `PerceptDelay`: Deterministic delay model by medium/distance.
+- `PerceptDeliveryPolicy`: Agent-specific delivery policy record.
+- `PerceptDownsampler`: Deterministic event-storm downsampling policy.
+- `PerceptException`: PerceptBus exception type.
+- `PerceptProvenanceChain`: Debug provenance record for delivered percepts.
+
+### scripting-society
+- `CulturalDriftTracker`: Canonical drift applier and drift-history query helper.
+- `DimensionWeight`: Dimension weighting/parameter record for a society.
+- `InteractionFunction`: Deterministic society-interaction computation engine.
+- `InteractionMode`: Alignment/opposition/orthogonality enum.
+- `InteractionOutcome`: Society-interaction result record.
+- `SocietyException`: Society module exception type.
+- `SocietyProfile`: Society vector profile record.
+- `SocietyProfileLoader`: Profile loader stub (YAML deferred) and programmatic builder.
+- `SocietyRegistry`: Thread-safe profile registry.
+
+### scripting-economy
+- `AvailabilityPool`: Thread-safe resource availability tracker.
+- `BountyRecord`: Canonical bounty record.
+- `Contract`: Canonical contract record.
+- `ContractCostTable`: Deterministic cost lookup table with deferred full reload.
+- `ContractState`: Contract/bounty lifecycle enum.
+- `EconomicsArchetype`: Chronicler archetype for economic escalation events.
+- `EconomicsBudgetRule`: Oracle arbitration rule for economic budget checks.
+- `EconomicsDimension`: Canon-dimension provider for economics.
+- `EconomyException`: Economy module exception type.
+- `FactionFunds`: Immutable faction fund-balance record and operations.
+
+### scripting-runtime
+- `AgentCognitiveTier`: Cognitive degradation tier enum.
+- `AgentTickDebt`: Agent lag snapshot record.
+- `CanonLogEvent`: EventBus event wrapping committed CanonEvent.
+- `DegradationMonitor`: Agent tier/debt tracker.
+- `IntentBusImpl`: EventBus-backed IntentBus implementation.
+- `IntentEvent`: EventBus event wrapping Intent.
+- `RuntimeBuilder`: Fluent runtime assembler and wiring root.
+- `RuntimeConfiguration`: Runtime configuration record and builder.
+- `RuntimeException`: Runtime module exception type.
+- `RuntimeTick`: Canonical tick executor.
+- `RuntimeTickResult`: Tick execution result record.
+- `ScriptingRuntime`: Runtime façade for ticking, patching, event access, and seeding.
+
+### scripting-ashford
+- `AshfordDebugOverlay`: Console debug presenter for runtime/canon/degradation state.
+- `AshfordDemo`: Standalone demo entrypoint with wall-time pacing only.
+- `AshfordRuntimeAssembler`: Programmatic demo-only runtime assembly and seeding.
+
+## Architectural Invariants
+
+1. Only Oracle may append to CanonLog via commit paths.
+2. Chronicler never commits directly — proposals only via WorldEventEmitter.
+3. PerceptBus never introduces new canonical facts — view layer only.
+4. CanonTime never uses wall time — simulation time only.
+
+## Deferred Items
+
+- GraphLoader YAML loading.
+- SocietyProfileLoader YAML loading.
+- ContractCostTable full data-driven hot reload and validation.
+- DslValidator AST-based static analysis (keyword scanning currently used).
+- Full PerceptContributionRegistry integration with DynamisTerran/DynamisAudio/DynamisPhysics.
+
+## Known Tooling Limitations
+
+- `maven-dependency-plugin:dependency:analyze` fails on JDK 25 classfiles (`Unsupported class file major version 69`) in this workspace/toolchain.
+- Release audits should use `mvn dependency:tree` (and `mvn dependency:list` if needed) until the plugin supports Java 25 bytecode.

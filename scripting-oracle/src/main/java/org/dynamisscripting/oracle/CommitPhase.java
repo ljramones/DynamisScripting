@@ -1,10 +1,8 @@
 package org.dynamisscripting.oracle;
 
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.dynamis.core.event.EngineEvent;
-import org.dynamis.event.EventBus;
 import org.dynamisscripting.api.CanonLog;
 import org.dynamisscripting.api.value.CanonEvent;
 import org.dynamisscripting.api.value.CanonTime;
@@ -16,30 +14,27 @@ public final class CommitPhase {
     private final CanonLog canonLog;
     private final CanonTimekeeper timekeeper;
     private final AtomicLong commitIdCounter;
-    private final EventBus eventBus;
-    private final Function<CanonEvent, EngineEvent> canonEventMapper;
+    private final Consumer<CanonEvent> commitListener;
 
     public CommitPhase(CanonLog canonLog, CanonTimekeeper timekeeper, AtomicLong commitIdCounter) {
-        this(canonLog, timekeeper, commitIdCounter, null, null);
+        this(canonLog, timekeeper, commitIdCounter, null);
     }
 
     @SuppressFBWarnings(
             value = {"EI_EXPOSE_REP2"},
-            justification = "Optional EventBus is intentionally shared for runtime telemetry fanout")
+            justification = "Shared CanonLog/commit counter references are intentional for deterministic runtime orchestration")
     public CommitPhase(
             CanonLog canonLog,
             CanonTimekeeper timekeeper,
             AtomicLong commitIdCounter,
-            EventBus eventBus,
-            Function<CanonEvent, EngineEvent> canonEventMapper) {
+            Consumer<CanonEvent> commitListener) {
         if (canonLog == null || timekeeper == null || commitIdCounter == null) {
             throw new OracleException("COMMIT", "canonLog, timekeeper, and commitIdCounter must not be null");
         }
         this.canonLog = canonLog;
         this.timekeeper = timekeeper;
         this.commitIdCounter = commitIdCounter;
-        this.eventBus = eventBus;
-        this.canonEventMapper = canonEventMapper;
+        this.commitListener = commitListener;
     }
 
     public CommitPhaseResult run(Intent intent, String causalLink) {
@@ -75,13 +70,10 @@ public final class CommitPhase {
     }
 
     private void publishCanonLogEvent(CanonEvent event) {
-        if (eventBus == null || canonEventMapper == null) {
+        if (commitListener == null) {
             return;
         }
-        EngineEvent mappedEvent = canonEventMapper.apply(event);
-        if (mappedEvent != null) {
-            eventBus.publish(mappedEvent);
-        }
+        commitListener.accept(event);
     }
 
     public record CommitPhaseResult(boolean committed, long commitId, CanonTime canonTime) {
