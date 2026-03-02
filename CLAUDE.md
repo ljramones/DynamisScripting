@@ -20,6 +20,7 @@ Modules with quality gates can also be verified directly:
 mvn -pl scripting-api -am verify
 mvn -pl scripting-spi -am verify
 mvn -pl scripting-dsl -am verify
+mvn -pl scripting-canon -am verify
 ```
 
 ## Architecture Overview
@@ -60,6 +61,14 @@ The canonical reference is [docs/ADR-001.md](docs/ADR-001.md) and is frozen.
 - Deferred: full AST-based static analysis against parsed expression structure.
 
 Any future AST-based validator must preserve current rejection categories and reason codes.
+
+## Canon Time Invariant
+
+`CanonTimekeeper` must never use wall-time APIs for simulation state progression.
+
+- Forbidden for simulation logic: `System.currentTimeMillis()`, `System.nanoTime()`, `Instant`, and `LocalDateTime`.
+- Canon time advances only via explicit deterministic inputs (`advance(deltaNanos)` and `advanceToTick(targetTick)`).
+- `wallNanosAtInsert` in `CanonLogEntry` is telemetry-only and must never influence ordering, queries, arbitration, or replay logic.
 
 ## Conventions
 
