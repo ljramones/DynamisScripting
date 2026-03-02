@@ -6,7 +6,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 import org.dynamis.core.entity.EntityId;
+import org.dynamis.event.EventBus;
 import org.dynamisscripting.api.CanonLog;
+import org.dynamisscripting.api.IntentBus;
 import org.dynamisscripting.api.value.CanonEvent;
 import org.dynamisscripting.api.value.CanonTime;
 import org.dynamisscripting.api.value.WorldPatch;
@@ -22,6 +24,8 @@ public final class ScriptingRuntime {
     private final DslCompiler dslCompiler;
     private final List<CanonDimensionProvider> dimensions;
     private final AtomicLong commitIdCounter;
+    private final EventBus eventBus;
+    private final IntentBus intentBus;
     private final AtomicBoolean running;
     private final ReentrantLock patchLock;
 
@@ -32,7 +36,9 @@ public final class ScriptingRuntime {
             RuntimeTick runtimeTick,
             DslCompiler dslCompiler,
             List<CanonDimensionProvider> dimensions,
-            AtomicLong commitIdCounter) {
+            AtomicLong commitIdCounter,
+            EventBus eventBus,
+            IntentBus intentBus) {
         this.canonLog = requireNonNull(canonLog, "canonLog");
         this.timekeeper = requireNonNull(timekeeper, "timekeeper");
         this.degradationMonitor = requireNonNull(degradationMonitor, "degradationMonitor");
@@ -40,6 +46,8 @@ public final class ScriptingRuntime {
         this.dslCompiler = requireNonNull(dslCompiler, "dslCompiler");
         this.dimensions = List.copyOf(requireNonNull(dimensions, "dimensions"));
         this.commitIdCounter = requireNonNull(commitIdCounter, "commitIdCounter");
+        this.eventBus = requireNonNull(eventBus, "eventBus");
+        this.intentBus = requireNonNull(intentBus, "intentBus");
         this.running = new AtomicBoolean(false);
         this.patchLock = new ReentrantLock();
     }
@@ -68,6 +76,7 @@ public final class ScriptingRuntime {
                     "worldpatch:" + patch.version(),
                     "WorldPatchApplied(" + patch.version() + ")");
             canonLog.append(patchEvent);
+            eventBus.publish(new CanonLogEvent(patchEvent));
         } finally {
             patchLock.unlock();
         }
@@ -78,6 +87,14 @@ public final class ScriptingRuntime {
             justification = "Runtime intentionally exposes CanonLog only via the immutable interface contract")
     public CanonLog canonLog() {
         return canonLog;
+    }
+
+    public EventBus eventBus() {
+        return eventBus;
+    }
+
+    public IntentBus intentBus() {
+        return intentBus;
     }
 
     public DegradationMonitor degradationMonitor() {

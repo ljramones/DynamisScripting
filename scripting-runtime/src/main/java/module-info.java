@@ -1,4 +1,5 @@
 module org.dynamisscripting.runtime {
+    requires dynamis.event;
     requires static com.github.spotbugs.annotations;
     requires org.dynamisscripting.api;
     requires org.dynamisscripting.spi;

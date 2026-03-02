@@ -6,11 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.dynamis.core.entity.EntityId;
+import org.dynamisscripting.api.CanonLog;
+import org.dynamisscripting.api.value.CanonTime;
 import org.dynamisscripting.api.value.WorldPatch;
 import org.dynamisscripting.economy.EconomicsBudgetRule;
 import org.dynamisscripting.economy.EconomicsDimension;
+import org.dynamisscripting.api.value.WorldEvent;
 import org.dynamisscripting.spi.CanonDimensionProvider;
+import org.dynamisscripting.spi.ChroniclerNodeArchetype;
 import org.junit.jupiter.api.Test;
 
 class ScriptingRuntimeTest {
@@ -81,6 +89,56 @@ class ScriptingRuntimeTest {
         assertTrue(runtime.isRunning());
         runtime.stop();
         assertFalse(runtime.isRunning());
+    }
+
+    @Test
+    void eventBusPublishesCanonLogEventWhenCommitOccurs() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicInteger observed = new AtomicInteger(0);
+
+        ScriptingRuntime runtime = RuntimeBuilder.create()
+                .withDimension(new EconomicsDimension())
+                .withArchetype(alwaysInstantiateArchetype())
+                .build();
+
+        runtime.eventBus().subscribe(CanonLogEvent.class, event -> {
+            observed.incrementAndGet();
+            latch.countDown();
+        });
+
+        runtime.tick();
+
+        assertTrue(latch.await(3, TimeUnit.SECONDS));
+        assertTrue(observed.get() >= 1);
+    }
+
+    private static ChroniclerNodeArchetype alwaysInstantiateArchetype() {
+        return new ChroniclerNodeArchetype() {
+            @Override
+            public String archetypeId() {
+                return "runtime.test.archetype";
+            }
+
+            @Override
+            public String archetypeName() {
+                return "Runtime Test Archetype";
+            }
+
+            @Override
+            public boolean canInstantiate(CanonLog canonLog, CanonTime currentTime) {
+                return true;
+            }
+
+            @Override
+            public WorldEvent instantiate(CanonLog canonLog, CanonTime currentTime) {
+                return WorldEvent.of(
+                        "runtime.test.node",
+                        archetypeId(),
+                        Map.of("tick", currentTime.tick()),
+                        5,
+                        currentTime);
+            }
+        };
     }
 
     private static final class RecordingDimension implements CanonDimensionProvider {

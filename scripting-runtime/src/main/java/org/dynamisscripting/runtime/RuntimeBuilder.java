@@ -3,6 +3,8 @@ package org.dynamisscripting.runtime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+import org.dynamis.event.EventBus;
+import org.dynamis.event.EventBusBuilder;
 import org.dynamisscripting.api.value.WorldEvent;
 import org.dynamisscripting.canon.CanonTimekeeper;
 import org.dynamisscripting.canon.DefaultCanonLog;
@@ -101,6 +103,8 @@ public final class RuntimeBuilder {
         DefaultCanonLog canonLog = new DefaultCanonLog();
         CanonTimekeeper timekeeper = new CanonTimekeeper();
         AtomicLong commitIdCounter = new AtomicLong(1L);
+        EventBus eventBus = EventBusBuilder.create().async(2).build();
+        IntentBusImpl intentBus = new IntentBusImpl(eventBus);
 
         RuleRegistry ruleRegistry = new RuleRegistry();
         for (ArbitrationRule rule : arbitrationRules) {
@@ -110,7 +114,12 @@ public final class RuntimeBuilder {
         BudgetLedger budgetLedger = new BudgetLedger();
         ValidatePhase validatePhase = new ValidatePhase(ruleRegistry, budgetLedger);
         ShapePhase shapePhase = new ShapePhase(ruleRegistry);
-        CommitPhase commitPhase = new CommitPhase(canonLog, timekeeper, commitIdCounter);
+        CommitPhase commitPhase = new CommitPhase(
+                canonLog,
+                timekeeper,
+                commitIdCounter,
+                eventBus,
+                CanonLogEvent::new);
 
         DefaultWorldOracle oracle = new DefaultWorldOracle(
                 validatePhase,
@@ -173,7 +182,9 @@ public final class RuntimeBuilder {
                 runtimeTick,
                 dslCompiler,
                 List.copyOf(dimensions),
-                commitIdCounter);
+                commitIdCounter,
+                eventBus,
+                intentBus);
     }
 
     private static <T> T requireNonNull(T value, String field) {
