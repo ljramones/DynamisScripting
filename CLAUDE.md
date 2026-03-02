@@ -21,6 +21,7 @@ mvn -pl scripting-api -am verify
 mvn -pl scripting-spi -am verify
 mvn -pl scripting-dsl -am verify
 mvn -pl scripting-canon -am verify
+mvn -pl scripting-oracle -am verify
 ```
 
 ## Architecture Overview
@@ -69,6 +70,14 @@ Any future AST-based validator must preserve current rejection categories and re
 - Forbidden for simulation logic: `System.currentTimeMillis()`, `System.nanoTime()`, `Instant`, and `LocalDateTime`.
 - Canon time advances only via explicit deterministic inputs (`advance(deltaNanos)` and `advanceToTick(targetTick)`).
 - `wallNanosAtInsert` in `CanonLogEntry` is telemetry-only and must never influence ordering, queries, arbitration, or replay logic.
+
+## Oracle WorldEvent Bypass
+
+`DefaultWorldOracle.commitWorldEvent()` intentionally bypasses `ValidatePhase` and `ShapePhase`.
+
+- Rationale: `WorldEvent` inputs are Chronicler proposals that are pre-validated in Chronicler logic by design.
+- Oracle still serializes them into CanonLog with canonical commit ordering and causal links.
+- This bypass never grants direct canonical mutation authority to agents or non-Oracle systems.
 
 ## Conventions
 
