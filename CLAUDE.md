@@ -88,6 +88,20 @@ Any future AST-based validator must preserve current rejection categories and re
 - Rationale: YAML parsing and schema validation are deferred until the content pipeline task.
 - Guardrail: Chronicler remains deterministic and testable with explicit in-memory graph definitions.
 
+## Society Loader Deferral
+
+`SocietyProfileLoader.loadFromYaml()` is intentionally a stub in the current phase.
+
+- Current behavior: throws a descriptive `SocietyException` instructing callers to use `SocietyProfileLoader.build(...)`.
+- Rationale: YAML parsing/schema validation for society content is deferred until the content pipeline task.
+
+## Society Drift Constant
+
+`CulturalDriftTracker.MAX_DRIFT_PER_TICK` is currently hardcoded to `0.01`.
+
+- Current behavior: drifts exceeding this bound are rejected to prevent runaway canonical changes.
+- Future improvement: move this constant to runtime configuration for world-specific tuning.
+
 ## Conventions
 
 - Group ID: `org.dynamisscripting`
