@@ -111,8 +111,8 @@ Any future AST-based validator must preserve current rejection categories and re
 
 ## Conventions
 
-- Group ID: `org.dynamisscripting`
-- Package root: `org.dynamisscripting.*`
+- Group ID: `org.dynamisengine.scripting`
+- Package root: `org.dynamisengine.scripting.*`
 - Use Conventional Commits (`feat:`, `fix:`, `docs:`, etc.)
 - Keep canonical boundaries strict: no cognition state mutations outside DynamisAI
 

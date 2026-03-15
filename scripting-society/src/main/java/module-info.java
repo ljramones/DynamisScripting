@@ -1,8 +1,8 @@
-module org.dynamisscripting.society {
+module org.dynamisengine.scripting.society {
     requires static com.github.spotbugs.annotations;
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.spi;
-    requires org.dynamisscripting.canon;
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.spi;
+    requires org.dynamisengine.scripting.canon;
 
-    exports org.dynamisscripting.society;
+    exports org.dynamisengine.scripting.society;
 }

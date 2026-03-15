@@ -1,15 +1,15 @@
-module org.dynamisscripting.runtime {
+module org.dynamisengine.scripting.runtime {
     requires dynamis.event;
     requires static com.github.spotbugs.annotations;
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.spi;
-    requires org.dynamisscripting.dsl;
-    requires org.dynamisscripting.canon;
-    requires org.dynamisscripting.oracle;
-    requires org.dynamisscripting.chronicler;
-    requires org.dynamisscripting.percept;
-    requires org.dynamisscripting.society;
-    requires org.dynamisscripting.economy;
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.spi;
+    requires org.dynamisengine.scripting.dsl;
+    requires org.dynamisengine.scripting.canon;
+    requires org.dynamisengine.scripting.oracle;
+    requires org.dynamisengine.scripting.chronicler;
+    requires org.dynamisengine.scripting.percept;
+    requires org.dynamisengine.scripting.society;
+    requires org.dynamisengine.scripting.economy;
 
-    exports org.dynamisscripting.runtime;
+    exports org.dynamisengine.scripting.runtime;
 }

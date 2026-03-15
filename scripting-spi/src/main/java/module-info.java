@@ -1,6 +1,6 @@
-module org.dynamisscripting.spi {
-    requires transitive org.dynamisscripting.api;
+module org.dynamisengine.scripting.spi {
+    requires transitive org.dynamisengine.scripting.api;
 
-    exports org.dynamisscripting.spi;
-    exports org.dynamisscripting.spi.result;
+    exports org.dynamisengine.scripting.spi;
+    exports org.dynamisengine.scripting.spi.result;
 }

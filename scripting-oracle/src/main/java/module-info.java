@@ -1,9 +1,9 @@
-module org.dynamisscripting.oracle {
+module org.dynamisengine.scripting.oracle {
     requires static com.github.spotbugs.annotations;
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.spi;
-    requires org.dynamisscripting.canon;
-    requires org.dynamisscripting.dsl;
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.spi;
+    requires org.dynamisengine.scripting.canon;
+    requires org.dynamisengine.scripting.dsl;
 
-    exports org.dynamisscripting.oracle;
+    exports org.dynamisengine.scripting.oracle;
 }

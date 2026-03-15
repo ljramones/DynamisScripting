@@ -1,6 +1,6 @@
-module org.dynamisscripting.dsl {
-    requires transitive org.dynamisscripting.api;
+module org.dynamisengine.scripting.dsl {
+    requires transitive org.dynamisengine.scripting.api;
     requires mvel3;
 
-    exports org.dynamisscripting.dsl;
+    exports org.dynamisengine.scripting.dsl;
 }

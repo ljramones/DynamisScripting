@@ -1,6 +1,6 @@
-module org.dynamisscripting.api {
-    requires transitive dynamis.core;
+module org.dynamisengine.scripting.api {
+    requires transitive org.dynamisengine.core;
 
-    exports org.dynamisscripting.api;
-    exports org.dynamisscripting.api.value;
+    exports org.dynamisengine.scripting.api;
+    exports org.dynamisengine.scripting.api.value;
 }

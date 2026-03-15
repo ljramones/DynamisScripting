@@ -1,9 +1,9 @@
-module org.dynamisscripting.ashford {
-    requires org.dynamisscripting.runtime;
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.chronicler;
-    requires org.dynamisscripting.economy;
-    requires dynamis.core;
+module org.dynamisengine.scripting.ashford {
+    requires org.dynamisengine.scripting.runtime;
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.chronicler;
+    requires org.dynamisengine.scripting.economy;
+    requires org.dynamisengine.core;
 
-    exports org.dynamisscripting.ashford;
+    exports org.dynamisengine.scripting.ashford;
 }

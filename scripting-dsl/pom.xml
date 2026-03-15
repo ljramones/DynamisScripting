@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.dynamisscripting</groupId>
+        <groupId>org.dynamisengine.scripting</groupId>
         <artifactId>dynamis-scripting-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -20,7 +20,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.dynamisscripting</groupId>
+            <groupId>org.dynamisengine.scripting</groupId>
             <artifactId>dynamis-scripting-api</artifactId>
             <version>${project.version}</version>
         </dependency>

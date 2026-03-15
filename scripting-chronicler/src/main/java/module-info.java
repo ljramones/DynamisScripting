@@ -1,10 +1,10 @@
-module org.dynamisscripting.chronicler {
+module org.dynamisengine.scripting.chronicler {
     requires static com.github.spotbugs.annotations;
     requires java.logging;
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.spi;
-    requires org.dynamisscripting.canon;
-    requires org.dynamisscripting.dsl;
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.spi;
+    requires org.dynamisengine.scripting.canon;
+    requires org.dynamisengine.scripting.dsl;
 
-    exports org.dynamisscripting.chronicler;
+    exports org.dynamisengine.scripting.chronicler;
 }

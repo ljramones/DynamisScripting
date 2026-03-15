@@ -1,6 +1,6 @@
-module org.dynamisscripting.canon {
-    requires org.dynamisscripting.api;
-    requires org.dynamisscripting.spi;
+module org.dynamisengine.scripting.canon {
+    requires org.dynamisengine.scripting.api;
+    requires org.dynamisengine.scripting.spi;
 
-    exports org.dynamisscripting.canon;
+    exports org.dynamisengine.scripting.canon;
 }
