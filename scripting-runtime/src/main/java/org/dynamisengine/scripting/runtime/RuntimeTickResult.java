@@ -6,7 +6,16 @@ public record RuntimeTickResult(
         CanonTime canonTime,
         int worldEventsProposed,
         int worldEventsCommitted,
-        long tickDurationNanos) {
+        long tickDurationNanos,
+        long chroniclerNanos,
+        long evaluationErrors,
+        long cacheHits,
+        long cacheMisses,
+        int cacheSize) {
+
+    public RuntimeTickResult(CanonTime canonTime, int worldEventsProposed, int worldEventsCommitted, long tickDurationNanos) {
+        this(canonTime, worldEventsProposed, worldEventsCommitted, tickDurationNanos, 0, 0, 0, 0, 0);
+    }
 
     public RuntimeTickResult {
         if (canonTime == null) {

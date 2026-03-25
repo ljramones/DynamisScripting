@@ -48,6 +48,8 @@ public final class DefaultChronicler implements Chronicler {
         emitter.registerListener(listener);
     }
 
+    public long evaluationErrors() { return evaluator.evaluationErrors(); }
+
     private static <T> T requireNonNull(T value, String field) {
         if (value == null) {
             throw new ChroniclerException("DefaultChronicler", field + " must not be null");

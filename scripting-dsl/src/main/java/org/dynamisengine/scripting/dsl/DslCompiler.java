@@ -1,9 +1,14 @@
 package org.dynamisengine.scripting.dsl;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public final class DslCompiler {
     private final ConcurrentHashMap<String, DslExpression> expressionCache;
+
+    // Telemetry counters (atomic for thread safety, telemetry-only)
+    private final AtomicLong cacheHitCount = new AtomicLong();
+    private final AtomicLong cacheMissCount = new AtomicLong();
 
     public DslCompiler() {
         this.expressionCache = new ConcurrentHashMap<>();
@@ -11,16 +16,30 @@ public final class DslCompiler {
 
     public PredicateExpression compilePredicateExpression(String expression) {
         DslValidator.validate(expression);
-        DslExpression cached = expressionCache.computeIfAbsent(predicateCacheKey(expression),
+        String key = predicateCacheKey(expression);
+        DslExpression existing = expressionCache.get(key);
+        if (existing != null) {
+            cacheHitCount.incrementAndGet();
+            return (PredicateExpression) existing;
+        }
+        cacheMissCount.incrementAndGet();
+        DslExpression compiled = expressionCache.computeIfAbsent(key,
                 ignored -> compilePredicateInternal(expression));
-        return (PredicateExpression) cached;
+        return (PredicateExpression) compiled;
     }
 
     public RewriteExpression compileRewriteExpression(String expression) {
         DslValidator.validate(expression);
-        DslExpression cached = expressionCache.computeIfAbsent(rewriteCacheKey(expression),
+        String key = rewriteCacheKey(expression);
+        DslExpression existing = expressionCache.get(key);
+        if (existing != null) {
+            cacheHitCount.incrementAndGet();
+            return (RewriteExpression) existing;
+        }
+        cacheMissCount.incrementAndGet();
+        DslExpression compiled = expressionCache.computeIfAbsent(key,
                 ignored -> compileRewriteInternal(expression));
-        return (RewriteExpression) cached;
+        return (RewriteExpression) compiled;
     }
 
     public void invalidateCache() {
@@ -30,6 +49,9 @@ public final class DslCompiler {
     public int cacheSize() {
         return expressionCache.size();
     }
+
+    public long cacheHits() { return cacheHitCount.get(); }
+    public long cacheMisses() { return cacheMissCount.get(); }
 
     private PredicateExpression compilePredicateInternal(String expression) {
         return new PredicateExpression(expression, expression, DslValidator.extractVariables(expression));

@@ -14,6 +14,7 @@ public final class TriggerEvaluator {
 
     private final PredicateDsl predicateDsl;
     private final CanonLog canonLog;
+    private final java.util.concurrent.atomic.AtomicLong evaluationErrorCount = new java.util.concurrent.atomic.AtomicLong();
 
     @SuppressFBWarnings(
             value = {"EI_EXPOSE_REP2"},
@@ -31,6 +32,7 @@ public final class TriggerEvaluator {
             CanonEvaluationContext context = new CanonEvaluationContext(canonLog, currentTime);
             return predicateDsl.evaluate(node.triggerPredicate(), context);
         } catch (RuntimeException exception) {
+            evaluationErrorCount.incrementAndGet();
             LOGGER.warn(
                     "Trigger evaluation failed for node " + node.nodeId() + " expression '" + node.triggerPredicate() + "'",
                     exception);
@@ -56,6 +58,8 @@ public final class TriggerEvaluator {
                             "Evaluation failed: " + exception.getMessage())));
         }
     }
+
+    public long evaluationErrors() { return evaluationErrorCount.get(); }
 
     @SuppressFBWarnings(
             value = {"EI_EXPOSE_REP"},

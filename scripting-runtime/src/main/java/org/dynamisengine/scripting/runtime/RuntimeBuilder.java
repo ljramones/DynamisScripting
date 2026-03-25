@@ -183,7 +183,8 @@ public final class RuntimeBuilder {
                 oracle,
                 perceptBus,
                 degradationMonitor,
-                configuration);
+                configuration,
+                dslCompiler);
 
         return new ScriptingRuntime(
                 canonLog,
